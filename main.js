@@ -17,9 +17,10 @@ const currentMinTemperatureEL = document.querySelector(
 );
 const bodyEl = document.querySelector(".show-background");
 
+addEventListener("DOMContentLoaded", bodyEl);
 addEventListener("DOMContentLoaded", showCurrentWeatherData);
 
-export function showLoadingScreen() {
+function showLoadingScreen() {
   bodyEl.innerHTML = `<div class="loading-screen">
       <p class="loading-message">Lade Wetterdaten...</p>
       <div class="lds-ring">
@@ -31,38 +32,37 @@ export function showLoadingScreen() {
     </div>`;
 }
 
-export function hideLoadingScreen() {
-  bodyEl.innerHTML = `<div class="current-weather">
-        <h2 class="current-weather__location"></h2>
-        <h1 class="current-weather__current-temperature"></h1>
-        <p class="current-weather__condition"></p>
+async function showWeatherData() {
+  const allWeatherData = await getWeatherData();
+
+  bodyEl.innerHTML = ` 
+      <div class="current-weather">
+        <h2 class="current-weather__location">${
+          allWeatherData.location.name
+        }</h2>
+        <h1 class="current-weather__current-temperature">${
+          Math.floor(allWeatherData.current.temp_c) + "°"
+        }</h1>
+        <p class="current-weather__condition">${
+          allWeatherData.current.condition.text
+        }</p>
         <div class="current-weather__day-temperatures">
-          <span class="current-weather__max-temperature"></span>
-          <span class="current-weather__min-temperature"></span>
+          <span class="current-weather__max-temperature">${
+            "H:" +
+            Math.floor(allWeatherData.forecast.forecastday[0].day.maxtemp_c) +
+            "°"
+          }</span>
+          <span class="current-weather__min-temperature">${
+            "T:" +
+            Math.floor(allWeatherData.forecast.forecastday[0].day.mintemp_c) +
+            "°"
+          }</span>
         </div>
       </div>`;
 }
 
 async function showCurrentWeatherData() {
-  const allWeatherData = await getWeatherData();
+  showLoadingScreen();
 
-  hideLoadingScreen();
-  if (allWeatherData) {
-  }
-  currentWeatherLocationEL.innerText = allWeatherData.location.name;
-
-  currentTemperatureEL.innerText =
-    Math.floor(allWeatherData.current.temp_c) + "°";
-
-  currentWeatherConditionEL.innerText = allWeatherData.current.condition.text;
-
-  currentMaxTemperatureEL.innerText =
-    "H:" +
-    Math.floor(allWeatherData.forecast.forecastday[0].day.maxtemp_c) +
-    "°";
-
-  currentMinTemperatureEL.innerText =
-    "T:" +
-    Math.floor(allWeatherData.forecast.forecastday[0].day.mintemp_c) +
-    "°";
+  showWeatherData();
 }
