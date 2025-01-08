@@ -15,9 +15,8 @@ const currentMaxTemperatureEL = document.querySelector(
 const currentMinTemperatureEL = document.querySelector(
   ".current-weather__min-temperature"
 );
-const bodyEl = document.querySelector(".show-background");
+let bodyEl;
 
-addEventListener("DOMContentLoaded", bodyEl);
 addEventListener("DOMContentLoaded", showCurrentWeatherData);
 
 function showLoadingScreen() {
@@ -62,6 +61,8 @@ async function showWeatherData() {
 }
 
 async function showCurrentWeatherData() {
+  bodyEl = document.querySelector(".show-background");
+
   showLoadingScreen();
 
   showWeatherData();
