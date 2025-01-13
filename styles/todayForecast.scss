@@ -1,6 +1,7 @@
 @import "variables";
 
 .today-forecast {
+  margin-top: 2rem;
   border-radius: $border-radius;
   background-color: grey;
   padding: 1rem;
@@ -35,7 +36,7 @@
   }
 
   &__icon {
-    width: 64px;
+    width: 4rem;
   }
 
   &__temperature {

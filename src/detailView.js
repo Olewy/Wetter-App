@@ -1,5 +1,6 @@
 import { getWeatherData } from "./fetching";
 import { renderLoadingScreen } from "./loading";
+import { getForecastHtml } from "./todayForecastView";
 import { formatTemperature } from "./utils";
 
 export let rootElement = document.getElementById("app");
@@ -10,6 +11,7 @@ export async function loadHeaderWeatherData(cityName) {
   const weatherData = await getWeatherData(cityName);
 
   getHeaderHtml(weatherData);
+  getForecastHtml(weatherData);
 }
 
 async function getHeaderHtml(weatherData) {
