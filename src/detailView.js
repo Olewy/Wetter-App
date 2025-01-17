@@ -1,6 +1,9 @@
 import { getWeatherData } from "./fetching";
 import { renderLoadingScreen } from "./loading";
-import { getForecastHtml } from "./todayForecastView";
+import {
+  createHourlyForecastElements,
+  getForecastHtml,
+} from "./todayForecastView";
 import { formatTemperature } from "./utils";
 
 export let rootElement = document.getElementById("app");
@@ -12,9 +15,10 @@ export async function loadHeaderWeatherData(cityName) {
 
   getHeaderHtml(weatherData);
   getForecastHtml(weatherData);
+  createHourlyForecastElements(weatherData);
 }
 
-async function getHeaderHtml(weatherData) {
+function getHeaderHtml(weatherData) {
   rootElement.innerHTML = ` 
           <div class="current-weather">
             <h2 class="current-weather__location">${
