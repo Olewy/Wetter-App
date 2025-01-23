@@ -3,6 +3,7 @@ import { renderLoadingScreen } from "./loading";
 import {
   createHourlyForecastElements,
   getForecastHtml,
+  calcuteHourlyForecast,
 } from "./todayForecastView";
 import { formatTemperature } from "./utils";
 
@@ -15,7 +16,7 @@ export async function loadHeaderWeatherData(cityName) {
 
   getHeaderHtml(weatherData);
   getForecastHtml(weatherData);
-  createHourlyForecastElements(weatherData);
+  createHourlyForecastElements(calcuteHourlyForecast);
 }
 
 function getHeaderHtml(weatherData) {
