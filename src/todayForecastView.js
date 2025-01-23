@@ -1,4 +1,4 @@
-import { rootElement } from "./detailView";
+import { rootElement, weatherData } from "./detailView";
 import { getWeatherData } from "./fetching";
 import { renderLoadingScreen } from "./loading";
 import { formatTemperature, formatTime } from "./utils";
@@ -37,32 +37,32 @@ function getHourlyForecastElement(hourElement) {
   return forecastElement;
 }
 
-let hourlyForecastArray;
-
 export async function createHourlyForecastElements(calcuteHourlyForecast) {
   const hourlyForecastEl = document.querySelector(".today-forecast__hours");
 
-  hourlyForecastArray = calcuteHourlyForecast();
+  const hourlyForecastArray = await calcuteHourlyForecast(weatherData);
+
+  let hourlyHTML = "";
 
   hourlyForecastArray.forEach((hourElement) => {
-    const hourForecastElement = getHourlyForecastElement(hourElement);
-
-    hourlyForecastEl.innerHTML += hourForecastElement;
+    hourlyHTML += getHourlyForecastElement(hourElement);
   });
+
+  hourlyForecastEl.innerHTML = hourlyHTML;
 }
 
 export async function calcuteHourlyForecast(weatherData) {
   // 0. neues Array erstellen, später mit den 24 stunden Objekten befüllen
   const newHourlyForecastArray = [];
 
-  hourlyForecastArray = weatherData.forecast.forecastday[0].hour;
+  const hourlyForecastArray = weatherData.forecast.forecastday[0].hour;
 
   // 1. aktuelles Stunden-Objekt
   const currentHour = new Date().getHours();
 
   // 1.1 Welches stunden Objekt ist das aktuelle Stunden objekt (aktuelle Uhrzeit stimmt überein), index des Objkets speichern
   const currentHourIndex = hourlyForecastArray.findIndex(
-    (hour) => new Date(hour.time.time_epoch * 1000).getHours() === currentHour
+    (hour) => new Date(hour.time_epoch * 1000).getHours() === currentHour
   );
 
   // 2. Aktuelles forecastday Objekt sowie den rest des Tages in das neue Array hinzufügen
@@ -79,7 +79,7 @@ export async function calcuteHourlyForecast(weatherData) {
   const nextDayHourlyForecastArray = weatherData.forecast.forecastday[1].hour;
 
   // 3.1 restliche Stunden Objekte vom zweiten forecastday objekt dem array hinzufügen bis 24 Stunden erreicht sind
-  const hoursNeeded = 24 - newHourlyForecastArray - length;
+  const hoursNeeded = 24 - newHourlyForecastArray.length;
   for (let i = 0; i < hoursNeeded; i++) {
     const hour = nextDayHourlyForecastArray[i];
     newHourlyForecastArray.push(hour);

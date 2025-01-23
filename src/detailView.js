@@ -9,10 +9,12 @@ import { formatTemperature } from "./utils";
 
 export let rootElement = document.getElementById("app");
 
+export let weatherData = await getWeatherData();
+
 export async function loadHeaderWeatherData(cityName) {
   renderLoadingScreen("Lade Wetter für " + cityName + "...");
 
-  const weatherData = await getWeatherData(cityName);
+  weatherData = await getWeatherData(cityName);
 
   getHeaderHtml(weatherData);
   getForecastHtml(weatherData);
